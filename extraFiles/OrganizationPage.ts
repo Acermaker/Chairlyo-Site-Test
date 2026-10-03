@@ -1,6 +1,6 @@
 import { expect, Page } from '@playwright/test';
 import BasePage from './BasePage';
-import OrganizationLocators from '../locators/organization.locator';
+import OrganizationLocators from './locators/organization.locator';
 
 export default class OrganizationPage extends BasePage {
     readonly organizationLocators: OrganizationLocators;

@@ -1,6 +1,6 @@
 import { expect, Page } from '@playwright/test';
 import BasePage from './BasePage';
-import LoginLocators from '../locators/login.locators';
+import LoginLocators from './locators/login.locators';
 
 export default class LoginPage extends BasePage{
   readonly loginLocators: LoginLocators;

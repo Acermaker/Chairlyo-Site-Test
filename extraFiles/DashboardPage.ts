@@ -1,6 +1,6 @@
 import { expect, Page } from '@playwright/test';
 import BasePage from './BasePage';
-import DashboardLocators from '../locators/dashboard.locators';
+import DashboardLocators from './locators/dashboard.locators';
 
 export default class DashboardPage extends BasePage{
     readonly dashboardLocators: DashboardLocators;
