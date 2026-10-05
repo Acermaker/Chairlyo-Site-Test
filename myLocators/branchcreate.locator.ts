@@ -36,7 +36,11 @@ export interface BranchCreateLocators {
     branchCreateToast: Locator,
     branchCreateSuccessMessage: Locator,
 
-    editBranchIcon: (slug: string) => Locator, 
+    searchInputField: Locator,
+
+    editBranchIcon: (slug: string) => Locator,
+    editBranchesHeading: Locator,
+    
     branchUpdatedToast: Locator,
     branchUpdateSuccessMessage: Locator,
 
@@ -46,6 +50,10 @@ export interface BranchCreateLocators {
 confirmDeleteButton: Locator,
 branchDeleteToast: Locator,
 branchDeleteSuccessMessage: Locator,
+
+
+invalidPhonenum: Locator,
+invalidEmail: Locator,
 
 
 }
@@ -79,17 +87,26 @@ export const branchcreateLocators = (page: Page): BranchCreateLocators => ({
  fillSaveChanges: page.locator(`button:has-text("Save Changes")`),
  branchCreateToast: page.getByRole('heading', { name: 'Branch Created' }),
  branchCreateSuccessMessage: page.getByText('The branch has been created successfully.', { exact: true }),
+
+ searchInputField: page.getByPlaceholder('Search...'),
  
  editBranchIcon: (slug: string) => page.getByRole('row', { name: new RegExp(slug, 'i') }).getByRole('link', { name: 'Edit branch' }),
+  editBranchesHeading: page.getByRole('heading', { name: 'Edit Branches' }),
+
  branchUpdatedToast: page.getByRole('heading', { name: 'Branch Updated' }),
  branchUpdateSuccessMessage: page.getByText('The branch has been updated successfully.', { exact: true }),
 
 
 deleteBranchIcon: (slug: string) => page.getByRole('row', { name: new RegExp(slug, 'i') }).locator('[title="Delete branch"]'),
-// deleteDialogTitle: page.getByTestId('dialog-title'),
 deleteConfirmationInput: page.getByPlaceholder('Type Delete Branch here'),
 confirmDeleteButton: page.getByRole('button', { name: 'Delete Branch' }),
+
 branchDeleteToast: page.getByRole('heading', { name: 'Deleted' }),
 branchDeleteSuccessMessage: page.getByText('The item has been deleted successfully.', { exact: true }),
+
+
+
+invalidPhonenum: page.getByText('Invalid phone number'),
+invalidEmail: page.getByText('Invalid email address'),
 
     });

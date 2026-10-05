@@ -109,7 +109,25 @@ async branchCreateSuccessMessage() {
     await expect(this.locators.branchCreateSuccessMessage).toBeVisible();
 }
 
-//BRANCH SLUG UPDATE        
+
+async navigateToEditBranch(slug: string) {
+  await this.locators.editBranchIcon(slug).click();
+  await expect(this.locators.editBranchesHeading).toBeVisible();
+}
+
+async searchBranch(query: string) {
+  await this.locators.searchInputField.click();
+  await this.locators.searchInputField.fill(query);
+}
+
+
+//BRANCH SLUG UPDATE      
+
+generateUniqueSlug(prefix: string = 'unique-saloon'): string {
+  const names = ['aayush', 'biraj', 'niranjan', 'kriti', 'pradip', 'alisha', 'sagar', 'rohan', 'arjun'];
+  const randomName = names[Math.floor(Math.random() * names.length)];
+  return `${prefix}-${randomName}-${Date.now()}`;
+}
 
 async fillBranchSlugValue(slug: string) {
   await expect(this.locators.fillBranchSlug).toBeVisible();
@@ -127,14 +145,10 @@ async updateBranchSlug(newSlug: string) {
 
 }
 
-async branchUpdatedToast() {
-await expect(this.locators.branchCreateToast).toBeVisible();
+async verifyBranchUpdateSuccess() {
+  await expect(this.locators.branchUpdatedToast).toBeVisible();
+  await expect(this.locators.branchUpdateSuccessMessage).toBeVisible();
 }
-
-async branchUpdateSuccessMessage() {
-    await expect(this.locators.branchUpdateSuccessMessage).toBeVisible();
-}
-
 
 async clickDeleteIcon(slug: string) {
   await this.locators.deleteBranchIcon(slug).click();
@@ -146,6 +160,19 @@ await expect(this.locators.deleteConfirmationInput).toBeVisible();
   await this.locators.confirmDeleteButton.click();
 }
 
+
+
+//For Negative branch create test:
+
+async fillBranchEmailValue(email: string) {
+  await expect(this.locators.fillBranchEmail).toBeVisible();
+  await this.locators.fillBranchEmail.fill(email);
+}
+
+async fillBranchPhonenumValue(phonenum: string) {
+  await expect(this.locators.fillBranchPhonenum).toBeVisible();
+  await this.locators.fillBranchPhonenum.fill(phonenum);
+}
 
 }
 

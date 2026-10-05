@@ -61,6 +61,39 @@ await branchcreatePage.branchCreateToast();
 await branchcreatePage.branchCreateSuccessMessage();
 });
 
+test('Branch is found through search input field', async ({ page })=> {
+ 
+ await branchcreatePage.loginToChairlyo(email, password);
+  await branchcreatePage.verifySuccessfulLogin(loginurl);
+
+  const slug = branchcreatePage.generateUniqueSlug();
+
+  await branchcreatePage.clickAddBranch();
+  await expect(page).toHaveURL(addbranchurl);
+
+  await branchcreatePage.fillBranchName();
+  await branchcreatePage.fillBranchSlugValue(slug);
+  await branchcreatePage.fillBranchPhonenum();
+  await branchcreatePage.fillBranchEmail();
+  await branchcreatePage.fillSelectStatus();
+  await branchcreatePage.fillBranchAddress();
+  await branchcreatePage.fillAdminFirstName();
+  await branchcreatePage.fillAdminLastName();
+  await branchcreatePage.fillAdminEmail();
+  await branchcreatePage.fillAdminPassword();
+  await branchcreatePage.fillAdminPhonenum();
+  await branchcreatePage.fillSaveChanges();
+
+  await expect(page).toHaveURL(loginurl);
+  await expect(branchcreatePage.locators.branchCreateToast).toBeVisible();
+  await expect(branchcreatePage.locators.branchCreateSuccessMessage).toBeVisible();
+
+  await branchcreatePage.searchBranch(slug);
+  await expect(page.getByText(slug)).toBeVisible();
+
+});
+
+
 
 test('Branch Slug Update', async ({ page }) => {
   const branchcreatePage = new BranchCreatePage(page);
@@ -74,7 +107,7 @@ test('Branch Slug Update', async ({ page }) => {
   await branchcreatePage.clickAddBranch();
   await expect(page).toHaveURL(addbranchurl);
   await branchcreatePage.fillBranchName();
-  await branchcreatePage.fillBranchSlugValue(slug); // see note below
+  await branchcreatePage.fillBranchSlugValue(slug);
   await branchcreatePage.fillBranchPhonenum();
   await branchcreatePage.fillBranchEmail();
   await branchcreatePage.fillSelectStatus();
@@ -88,18 +121,12 @@ test('Branch Slug Update', async ({ page }) => {
   await expect(branchcreatePage.locators.branchCreateToast).toBeVisible();
   await expect(branchcreatePage.locators.branchCreateSuccessMessage).toBeVisible();
 
+  await branchcreatePage.navigateToEditBranch(slug);
 
-  await branchcreatePage.clickEditIcon(slug);
-  await expect(page.getByRole('heading', { name: 'Edit Branches' })).toBeVisible();
+const updatedSlug = branchcreatePage.generateUniqueSlug();
+await branchcreatePage.updateBranchSlug(updatedSlug);
 
-const names = ['aayush', 'biraj', 'niranjan', 'kriti', 'pradip', 'alisha', 'sagar', 'rohan', 'arjun'];
-const randomName = names[Math.floor(Math.random() * names.length)];
-const updatedSlug = `unique-saloon-${randomName}-${Date.now()}`;
-  await branchcreatePage.updateBranchSlug(updatedSlug);
-
- 
-  await expect(branchcreatePage.locators.branchUpdatedToast).toBeVisible();
-await expect(branchcreatePage.locators.branchUpdateSuccessMessage).toBeVisible();
+ await branchcreatePage.verifyBranchUpdateSuccess();
 });
 
 
@@ -115,7 +142,7 @@ test('Deleting the Created Branch', async({ page })=> {
   await branchcreatePage.clickAddBranch();
   await expect(page).toHaveURL(addbranchurl);
   await branchcreatePage.fillBranchName();
-  await branchcreatePage.fillBranchSlugValue(slug); // see note below
+  await branchcreatePage.fillBranchSlugValue(slug); 
   await branchcreatePage.fillBranchPhonenum();
   await branchcreatePage.fillBranchEmail();
   await branchcreatePage.fillSelectStatus();
@@ -129,15 +156,12 @@ test('Deleting the Created Branch', async({ page })=> {
   await expect(branchcreatePage.locators.branchCreateToast).toBeVisible();
   await expect(branchcreatePage.locators.branchCreateSuccessMessage).toBeVisible();
 
-
-  await branchcreatePage.clickEditIcon(slug);
-  await expect(page.getByRole('heading', { name: 'Edit Branches' })).toBeVisible();
-
+  await branchcreatePage.navigateToEditBranch(slug);
 
 await expect(branchcreatePage.locators.branchCreateToast).toBeVisible();
 await expect(branchcreatePage.locators.branchCreateSuccessMessage).toBeVisible();
 
-await page.goto('https://qa03.stage.chairlyo.com/');
+await page.goto(loginurl);
 await branchcreatePage.clickDeleteIcon(slug);
 await branchcreatePage.confirmDelete();
 await expect(branchcreatePage.locators.branchDeleteToast).toBeVisible();
@@ -145,6 +169,101 @@ await expect(branchcreatePage.locators.branchDeleteSuccessMessage).toBeVisible()
 await expect(page.getByText(slug)).not.toBeVisible();
 
 });
+
+
+});
+
+
+test.describe( 'Branch Create Negative Test', () => {
+
+ let branchcreatePage: BranchCreatePage;
+const email = 'skilladmin@test.com';
+const password = 'Skill@123';
+const loginurl = 'https://qa03.stage.chairlyo.com/';
+const addbranchurl = 'https://qa03.stage.chairlyo.com/branches/add';
+
+test.beforeEach(async ({ page }) =>{
+branchcreatePage = new BranchCreatePage(page);
+await branchcreatePage.goto(loginurl);
+});
+
+test('Branch Create fails with all mandatory fields empty', async ({ page }) => {
+  await branchcreatePage.loginToChairlyo(email, password);
+  await branchcreatePage.verifySuccessfulLogin(loginurl);
+  await branchcreatePage.clickAddBranch();
+  await expect(page).toHaveURL(addbranchurl);
+
+ 
+  await branchcreatePage.fillSaveChanges();
+
+  
+  await expect(page).toHaveURL(addbranchurl);
+
+  await expect(page.getByText('Form Validation Error')).toBeVisible(); 
+  await expect(page.getByText('Please check the form for errors.')).toBeVisible();
+});
+
+
+test('Branch create fails with invalid emailInput', async({ page })=> { 
+
+await branchcreatePage.loginToChairlyo(email, password);
+  await branchcreatePage.verifySuccessfulLogin(loginurl);
+  await branchcreatePage.clickAddBranch();
+  await expect(page).toHaveURL(addbranchurl);
+
+  await branchcreatePage.fillBranchName();
+  await branchcreatePage.fillBranchSlug();
+  await branchcreatePage.fillBranchPhonenum();
+  await branchcreatePage.fillBranchEmailValue('invalid-email-format');
+
+  await branchcreatePage.fillSelectStatus();
+  await branchcreatePage.fillBranchAddress();
+
+  await branchcreatePage.fillAdminFirstName();
+  await branchcreatePage.fillAdminLastName();
+  await branchcreatePage.fillAdminEmail();
+  await branchcreatePage.fillAdminPassword();
+  await branchcreatePage.fillAdminPhonenum();
+
+  await branchcreatePage.fillSaveChanges();
+
+  await expect(page).toHaveURL(addbranchurl);
+
+  await expect(branchcreatePage.locators.invalidEmail).toBeVisible();
+});
+
+
+test('Branch create fails with invalid phone number', async({ page })=> {
+
+await branchcreatePage.loginToChairlyo(email, password);
+  await branchcreatePage.verifySuccessfulLogin(loginurl);
+  await branchcreatePage.clickAddBranch();
+  await expect(page).toHaveURL(addbranchurl);
+
+  await branchcreatePage.fillBranchName();
+  await branchcreatePage.fillBranchSlug();
+  await branchcreatePage.fillBranchPhonenumValue('123');
+  await branchcreatePage.fillBranchEmail();
+
+  await branchcreatePage.fillSelectStatus();
+  await branchcreatePage.fillBranchAddress();
+
+  await branchcreatePage.fillAdminFirstName();
+  await branchcreatePage.fillAdminLastName();
+  await branchcreatePage.fillAdminEmail();
+  await branchcreatePage.fillAdminPassword();
+  await branchcreatePage.fillAdminPhonenum();
+
+  await branchcreatePage.fillSaveChanges();
+
+  await expect(page).toHaveURL(addbranchurl);
+
+  await expect(branchcreatePage.locators.invalidPhonenum).toBeVisible();
+
+});
+
+
+
 
 
 });
