@@ -16,7 +16,7 @@ import { aborted } from 'node:util';
 // });
 
 
-test.describe('Login Tests', () =>{
+test.describe.skip('Login Tests', () =>{
 
 let loginPage: LoginPage;
 

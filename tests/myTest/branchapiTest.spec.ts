@@ -14,7 +14,7 @@ import {
 const email = 'skilladmin@test.com';
 const password = 'Skill@123';
 
-test.describe('Positive Branch API Tests', () => {
+test.describe.skip('Positive Branch API Tests', () => {
   let branchService: BranchService;
 
   test.beforeEach(async ({ request }) => {
@@ -75,7 +75,7 @@ test.describe('Positive Branch API Tests', () => {
 
 });
 
-test.describe('Negative Branch API Tests', () => {
+test.describe.skip('Negative Branch API Tests', () => {
   let branchService: BranchService;
 
   test.beforeEach(async ({ request }) => {

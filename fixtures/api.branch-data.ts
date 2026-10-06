@@ -51,7 +51,7 @@ export const generateInvalidPhonePayload = (): BranchPayload => {
   const payload = generateBranchPayload();
   return {
     ...payload,
-    phone: '123', // too short to be valid
+    phone: '123',
   };
 };
 
