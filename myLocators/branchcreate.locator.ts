@@ -56,6 +56,9 @@ invalidPhonenum: Locator,
 invalidEmail: Locator,
 
 
+loginSuccessToast: Locator,
+toastMessage: Locator,
+
 }
 
 export const branchcreateLocators = (page: Page): BranchCreateLocators => ({
@@ -84,7 +87,7 @@ export const branchcreateLocators = (page: Page): BranchCreateLocators => ({
  fillAdminPassword: page.locator('[name="admin_password"]'),
  fillAdminPhonenum: page.locator(`//input[@name='phone']`).last(),
 
- fillSaveChanges: page.locator(`button:has-text("Save Changes")`),
+ fillSaveChanges: page.getByRole('button', { name: 'Save Changes', exact: true }),
  branchCreateToast: page.getByRole('heading', { name: 'Branch Created' }),
  branchCreateSuccessMessage: page.getByText('The branch has been created successfully.', { exact: true }),
 
@@ -109,4 +112,11 @@ branchDeleteSuccessMessage: page.getByText('The item has been deleted successful
 invalidPhonenum: page.getByText('Invalid phone number'),
 invalidEmail: page.getByText('Invalid email address'),
 
+
+ loginSuccessToast: page.getByText('Login successful'),
+  toastMessage: page.locator('.toast-success, [role="alert"]')
+
     });
+
+
+ 

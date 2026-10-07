@@ -24,8 +24,8 @@ jobs:
       run: npx playwright install --with-deps
     - name: Run Playwright Tests
       env:
-       ORG_ADMIN_EMAIL: ${{ secrets.ORG_ADMIN_EMAIL }}
-       ORG_ADMIN_PASSWORD: ${{ secrets.ORG_ADMIN_PASSWORD }}
+       ORG_ADMIN_EMAIL: ${{ vars.ORG_ADMIN_EMAIL }}
+       ORG_ADMIN_PASSWORD: ${{ vars.ORG_ADMIN_PASSWORD }}
        BASE_URL: ${{ secrets.UI_BASE_URL }}
        API_BASE_URL: ${{ secrets.API_BASE_URL }}
 

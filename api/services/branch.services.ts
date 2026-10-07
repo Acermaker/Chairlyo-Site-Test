@@ -28,11 +28,22 @@ export class BranchService {
     }
   }
 
-  async getBranch(slug: string): Promise<Branch> {
-    const response = await this.apiClient.get(`branch/branches/${slug}/`);
-    const body: ApiResponseWrapper<Branch> = await response.json();
-    return body.data;
-  }
+async getBranch(slug: string): Promise<Branch> {
+  const response = await this.apiClient.get(`branch/branches/${slug}/`);
+
+  console.log('GET Branch Status:', response.status());
+
+  const body = await response.json();
+
+  console.log(
+    'GET Branch Response:',
+    JSON.stringify(body, null, 2)
+  );
+
+  return body.data;
+}
+
+
 
   async getBranchRaw(slug: string) {
     return this.apiClient.get(`branch/branches/${slug}/`);

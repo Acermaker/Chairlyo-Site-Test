@@ -1,4 +1,4 @@
-import { Page, expect } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 import { BranchCreateLocators, branchcreateLocators } from '../myLocators/branchcreate.locator'; 
 
 export class BranchCreatePage {
@@ -18,7 +18,8 @@ export class BranchCreatePage {
         await this.page.goto(url);
     }
 
-async loginToChairlyo(email: string, password: string) {
+async loginToChairlyo(email: string, password: string, url: string = 'https://qa03.stage.chairlyo.com/') {
+  await this.page.goto(url);
     await this.locators.emailInput.fill(email);
     await this.locators.passwordInput.fill(password);
     await this.locators.loginButton.click();
@@ -42,19 +43,34 @@ async clickAddBranch() {
 }
 
 async fillBranchName() {
-    await expect(this.locators.fillBranchName).toBeVisible();
-    await this.locators.fillBranchName.fill(`Branch_${['Aayush', 'Biraj', 'Niranjan', 'Kriti', 'Pradip', 'Alisha', 'Sagar', 'Rohan'][Math.floor(Math.random() * 8)]}`);
+  const names = ['Aayush', 'Biraj', 'Niranjan', 'Kriti', 'Pradip', 'Alisha', 'Sagar', 'Rohan', 'Arjun'];
+  const randomName = names[Math.floor(Math.random() * names.length)];
+  const uniqueName = `Branch_${randomName}_${Date.now()}`; //
+
+  await expect(this.locators.fillBranchName).toBeVisible();
+  await this.locators.fillBranchName.fill(uniqueName);
 }
 
 async fillBranchSlug() {
-    await expect(this.locators.fillBranchSlug).toBeVisible();
-    await this.locators.fillBranchSlug.fill(`unique-saloon_${['Aayush', 'Biraj', 'Niranjan', 'Kriti', 'Pradip', 'Alisha', 'Sagar', 'Rohan'][Math.floor(Math.random() * 8)]}`);
+  const names = ['Aayush', 'Biraj', 'Niranjan', 'Kriti', 'Pradip', 'Alisha', 'Sagar', 'Rohan', 'Arjun'];
+  const randomName = names[Math.floor(Math.random() * names.length)];
+  const uniqueSlug = `unique-saloon-${randomName}-${Date.now()}`;
+
+  await expect(this.locators.fillBranchSlug).toBeVisible();
+  await this.locators.fillBranchSlug.fill(uniqueSlug);
 }
 
-async fillBranchPhonenum() {
-  await expect(this.locators.fillBranchPhonenum).toBeVisible();
-  await this.locators.fillBranchPhonenum.fill(`97798${Math.floor(10000000 + Math.random() * 90000000)}`);
-}
+//   private async fillBranchPhonenum(phoneInput: Locator, phoneNumber: string) {
+//     await phoneInput.click();
+//     await phoneInput.press('End');
+ 
+//     const existingSubscriberNumber = (await phoneInput.inputValue()).replace(/^\+\d+\s*/, '');
+//     for (let i = 0; i < existingSubscriberNumber.length; i += 1) {
+//       await phoneInput.press('Backspace');
+//     }
+ 
+//     await phoneInput.pressSequentially(phoneNumber);
+//   }
 
 async fillBranchEmail() {
     await expect (this.locators.fillBranchEmail).toBeVisible();
@@ -92,10 +108,10 @@ async fillAdminPassword() {
     await this.locators.fillAdminPassword.fill('Sujan@123')
 }
 
-async fillAdminPhonenum() {
-    await expect (this.locators.fillAdminPhonenum).toBeVisible();
-    await this.locators.fillAdminPhonenum.fill(`97798${Math.floor(10000000 + Math.random() * 90000000)}`);
-}
+// async fillAdminPhonenum() {
+//     await expect (this.locators.fillAdminPhonenum).toBeVisible();
+//     await this.locators.fillAdminPhonenum.fill(`97798${Math.floor(10000000 + Math.random() * 90000000)}`);
+// }
 
 async fillSaveChanges() {
     await this.locators.fillSaveChanges.click();
@@ -113,6 +129,8 @@ async branchCreateSuccessMessage() {
 async navigateToEditBranch(slug: string) {
   await this.locators.editBranchIcon(slug).click();
   await expect(this.locators.editBranchesHeading).toBeVisible();
+
+   await this.page.waitForTimeout(2000); 
 }
 
 async searchBranch(query: string) {
@@ -138,17 +156,28 @@ async clickEditIcon(slug: string) {
   await this.locators.editBranchIcon(slug).click();
 }
 
-async updateBranchSlug(newSlug: string) {
-  await expect(this.locators.fillBranchSlug).toBeVisible();
-  await this.locators.fillBranchSlug.fill(newSlug);
-  await this.locators.fillSaveChanges.click();
 
+async updateBranchSlug(newSlug: string) {
+console.log('NEW METHOD EXECUTING');
+ 
+await expect(this.locators.fillBranchSlug).toBeVisible();
+await this.locators.fillBranchSlug.clear();
+await this.locators.fillBranchSlug.fill(newSlug);
+await this.locators.fillSaveChanges.click();
 }
+
+
+
 
 async verifyBranchUpdateSuccess() {
   await expect(this.locators.branchUpdatedToast).toBeVisible();
   await expect(this.locators.branchUpdateSuccessMessage).toBeVisible();
+
+   //await expect(this.locators.loginSuccessToast).toBeVisible();
+
 }
+
+
 
 async clickDeleteIcon(slug: string) {
   await this.locators.deleteBranchIcon(slug).click();
@@ -174,5 +203,33 @@ async fillBranchPhonenumValue(phonenum: string) {
   await this.locators.fillBranchPhonenum.fill(phonenum);
 }
 
+
+
+
+
+private async fillPhoneNumber(phoneInput: Locator, phoneNumber: string) {
+  await phoneInput.click();
+  await phoneInput.press('End');
+  const existingSubscriberNumber = (await phoneInput.inputValue()).replace(/^\+\d+\s*/, '');
+  for (let i = 0; i < existingSubscriberNumber.length; i += 1) {
+    await phoneInput.press('Backspace');
+  }
+  await phoneInput.pressSequentially(phoneNumber);
 }
+
+// Public method for Branch Phone field
+async fillBranchPhonenum() {
+  const randomPhone = `98${Math.floor(10000000 + Math.random() * 90000000)}`;
+  await this.fillPhoneNumber(this.locators.fillBranchPhonenum, randomPhone);
+}
+
+// Public method for Admin Phone field
+async fillAdminPhonenum() {
+  const randomPhone = `98${Math.floor(10000000 + Math.random() * 90000000)}`;
+  await this.fillPhoneNumber(this.locators.fillAdminPhonenum, randomPhone);
+}
+
+}
+
+
 
