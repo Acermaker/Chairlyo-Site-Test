@@ -5,11 +5,19 @@ import { BranchCreatePage } from '../../pages/branchcreate.page';
 
 test.describe( 'Branch Create,Edit and Delete Test', () =>{
   let branchcreatePage: BranchCreatePage;
-const email = process.env.TEST_EMAIL!;
-const password = process.env.TEST_PASSWORD!;
-const loginurl = process.env.LOGIN_URL!;
+const email = process.env.ORG_ADMIN_EMAIL!;
+const password = process.env.ORG_ADMIN_PASSWORD!;
+const loginurl = process.env.BASE_URL!
 const addbranchurl = 'https://qa03.stage.chairlyo.com/branches/add';
 
+  console.log('ORG_ADMIN_EMAIL:', process.env.ORG_ADMIN_EMAIL);
+  console.log(
+    'ORG_ADMIN_PASSWORD:',
+    process.env.ORG_ADMIN_PASSWORD ? 'Loaded' : 'Missing'
+  );
+  console.log('BASE_URL:', process.env.BASE_URL);
+
+  
 test.beforeEach(async ({ page }) =>{
 branchcreatePage = new BranchCreatePage(page);
 await branchcreatePage.goto(loginurl);
