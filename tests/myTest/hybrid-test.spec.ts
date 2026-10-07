@@ -9,9 +9,9 @@ import {
 generateBranchPayload,
 } from '../../fixtures/api.branch-data';
 
-const email = 'skilladmin@test.com';
-const password = 'Skill@123';
-const loginurl = 'https://qa03.stage.chairlyo.com/';
+const email = process.env.TEST_EMAIL!;
+const password = process.env.TEST_PASSWORD!;
+const loginurl = process.env.LOGIN_URL!;
 
 let branchcreatePage: BranchCreatePage;
 let branchService: BranchService;

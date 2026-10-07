@@ -177,9 +177,9 @@ await expect(page.getByText(slug)).not.toBeVisible();
 test.describe( 'Branch Create Negative Test', () => {
 
  let branchcreatePage: BranchCreatePage;
-const email = 'skilladmin@test.com';
-const password = 'Skill@123';
-const loginurl = 'https://qa03.stage.chairlyo.com/';
+const email = process.env.TEST_EMAIL!;
+const password = process.env.TEST_PASSWORD!;
+const loginurl = process.env.LOGIN_URL!;
 const addbranchurl = 'https://qa03.stage.chairlyo.com/branches/add';
 
 test.beforeEach(async ({ page }) =>{

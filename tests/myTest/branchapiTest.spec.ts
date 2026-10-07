@@ -11,8 +11,8 @@ import {
   generateEmptyRequiredFieldsPayload,
 } from '../../fixtures/api.branch-data';
 
-const email = 'skilladmin@test.com';
-const password = 'Skill@123';
+const email = process.env.TEST_EMAIL!;
+const password = process.env.TEST_PASSWORD!;
 
 test.describe('Positive Branch API Tests', () => {
   let branchService: BranchService;
